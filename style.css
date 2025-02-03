@@ -1,0 +1,57 @@
+header .d-flex.container {
+    height: 100px;
+}
+
+main .d-flex.container {
+    height: calc(100vh - 4rem - 100px);
+}
+
+@media screen and (max-width: 575px) {
+    main .rounded-pill {
+        height: 80%;
+        width: 70px;
+    }
+
+    main .rounded-pill .rounded-circle {
+        width: 100%;
+        height: 70px;
+    }
+
+    main .rounded-pill .pw-display {
+        height: calc(100% - 140px);
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 576px) {
+    main .rounded-pill {
+        height: 70px;
+        width: 100%;
+    }
+
+    main .rounded-pill .rounded-circle {
+        height: 100%;
+        width: 70px;
+    }
+
+    main .rounded-pill .pw-display {
+        width: calc(100% - 140px);
+        height: 100%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+
+}
+
+@media screen and (min-width: 992px) {
+
+}
+
+@media screen and (min-width: 1200px) {
+
+}
+
+@media screen and (min-width: 1400px) {
+
+}
