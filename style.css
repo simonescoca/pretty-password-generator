@@ -41,7 +41,9 @@ main .d-flex.container {
 }
 
 @media screen and (min-width: 768px) {
-
+    main .rounded-pill {
+        width: 560px;
+    }
 }
 
 @media screen and (min-width: 992px) {
