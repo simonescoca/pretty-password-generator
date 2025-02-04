@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Password Generator</title>
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap"
@@ -38,6 +38,7 @@
         font-family: "Courier Prime", monospace;
         font-size: 21px;
       }
+
       @media screen and (max-width: 575px) {
         #Slider-pill {
           height: 100%;
@@ -51,7 +52,26 @@
           height: calc(100% - 140px);
           width: 100%;
         }
+
+        #Pw-display .Block{
+            width: 100%;
+            height: 20%;
+        }
+
+        #Pw-display .Block:not(:last-child)::after {
+          content: " ";
+          display: table;
+          position: absolute;
+          bottom: -1px;
+          left: 50%;
+          transform: translate(-50%, 50%);
+          background: black;
+          height: 1.7px;
+          width: 10px;
+          border-radius: 1px;
+        }
       }
+
       @media screen and (min-width: 576px) {
         #Slider-pill {
           height: 70px;
@@ -65,7 +85,26 @@
           width: calc(100% - 140px);
           height: 100%;
         }
+
+        #Pw-display .Block{
+            height: 100%;
+            width: 20%;
+        }
+
+        #Pw-display .Block:not(:last-child)::after {
+          content: " ";
+          display: table;
+          position: absolute;
+          right: -1px;
+          top: 50%;
+          transform: translate(50%, -50%);
+          background: black;
+          height: 1.7px;
+          width: 10px;
+          border-radius: 1px;
+        }
       }
+
       @media screen and (min-width: 768px) {
         #Slider-pill {
           width: 560px;
@@ -102,39 +141,40 @@
           id="Slider-pill"
           class="m-auto mx-sm-auto mt-sm-3 border border-danger rounded-pill d-flex flex-column flex-sm-row justify-content-between align-items-center position-relative"
         >
-          <div id="Slider" class="bg-danger rounded-circle position-absolute"></div>
+          <!-- <div id="Slider" class="bg-danger rounded-circle position-absolute"></div> -->
           <div id="Copy" class="border border-primary rounded-circle"></div>
           <div
             id="Pw-display"
-            class="border border-success rounded d-flex flex-column flex-sm-row align-items-stretch"
+            class="border border-success rounded d-sm-flex"
           >
             <section
-              class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center"
+              class="Block border border-danger rounded d-flex justify-content-center align-items-center position-relative"
             >
               1111
             </section>
             <section
-              class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center"
+              class="Block border border-danger rounded d-flex justify-content-center align-items-center position-relative"
             >
               2222
             </section>
             <section
-              class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center"
+              class="Block border border-danger rounded d-flex justify-content-center align-items-center position-relative"
             >
               3333
             </section>
             <section
-              class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center"
+              class="Block border border-danger rounded d-flex justify-content-center align-items-center position-relative"
             >
               4444
             </section>
             <section
-              class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center"
+              class="Block border border-danger rounded d-flex justify-content-center align-items-center position-relative"
             >
               5555
             </section>
           </div>
           <div class="border border-primary rounded-circle"></div>
+          <div id="Slider" class="bg-danger rounded-circle position-absolute"></div>
         </div>
       </div>
     </main>
@@ -149,14 +189,75 @@
       let startPointerPos = 0;
       let startSliderPos = 0;
 
-      // Funzioni
+      // FUNZIONI PER GENERARE LE PASSWORD
 
-      // Imposta la posizione iniziale dello slider (all'inizio della slider pill)
+      function genRandomIndex(len) {
+        const arr = new Uint32Array(1);
+        window.crypto.getRandomValues(arr);
+        return arr[0] % len;
+      }
+
+      function generatePw(level) {
+        const ABC = "ABCDEFGHJKLMNPQRSTUVWXYZ".split("");
+        const abc = "abcdefghijkmnopqrstuvwxyz".split("");
+        const nums = "0123456789".split("");
+        const chars = "!@#$%&*?.".split("");
+        let password, checkCap, checkLow, checkNum, checkSC;
+        do {
+          password = "";
+          checkCap = checkLow = checkNum = checkSC = false;
+          for (let i = 0; i < 4 * level; i++) {
+            const boundary = (i % 4 === 0 || i % 4 === 3);
+            const options = boundary
+              ? [
+                  ABC[genRandomIndex(ABC.length)],
+                  abc[genRandomIndex(abc.length)],
+                  nums[genRandomIndex(nums.length)]
+                ]
+              : [
+                  ABC[genRandomIndex(ABC.length)],
+                  abc[genRandomIndex(abc.length)],
+                  nums[genRandomIndex(nums.length)],
+                  chars[genRandomIndex(chars.length)]
+                ];
+            const chosen = options[genRandomIndex(options.length)];
+            password += chosen;
+            if (ABC.includes(chosen)) checkCap = true;
+            if (abc.includes(chosen)) checkLow = true;
+            if (nums.includes(chosen)) checkNum = true;
+            if (chars.includes(chosen)) checkSC = true;
+          }
+        } while (!(checkCap && checkLow && checkNum && checkSC));
+        return password.match(/.{1,4}/g).join("-");
+      }
+
+      // Funzione per aggiornare la visualizzazione della password nei block
+      // Per ogni posizione (livello) si genera una password composta da 4*livello caratteri,
+      // suddivisi in gruppi da 4 caratteri (separati internamente da un trattino, ma il trattino non verrà mostrato a schermo)
+      function updatePasswordDisplay(level) {
+        const pwDisplay = document.getElementById("Pw-display");
+        const blocks = pwDisplay.querySelectorAll(".Block");
+        if (level === 0) {
+          blocks.forEach((block) => (block.textContent = ""));
+          return;
+        }
+        const password = generatePw(level);
+        // La password è formattata con trattini (es. "ABCD-EFGH")
+        // Suddividiamo in gruppi e assegnamo ogni gruppo al corrispondente block
+        const groups = password.split("-");
+        blocks.forEach((block, index) => {
+          block.textContent = groups[index] || "";
+        });
+      }
+
+      // FUNZIONI DI GESTIONE DELLO SLIDER
+
+      // Posiziona lo slider all'inizio della slider pill
       function setInitialPosition() {
         dragAxis = window.innerWidth < 576 ? "vertical" : "horizontal";
-        // Posizione iniziale: 0 rispetto a sliderPill
         slider.style.top = "0px";
         slider.style.left = "0px";
+        updatePasswordDisplay(0);
       }
 
       // Ritorna la posizione del puntatore (mouse o touch)
@@ -174,36 +275,28 @@
       function getSnapPositions() {
         const pillRect = sliderPill.getBoundingClientRect();
         const pwDisplay = document.getElementById("Pw-display");
-        const pwRect = pwDisplay.getBoundingClientRect();
         const blocks = document.querySelectorAll("#Pw-display .Block");
         let snaps = [];
         if (dragAxis === "vertical") {
-          // Livello 0: posizione iniziale (0)
           snaps.push(0);
-          // Livelli 1-5: per ogni block, la posizione in cui il bordo superiore dello slider
-          // tocca il bordo inferiore del block
           blocks.forEach((block) => {
             const blockRect = block.getBoundingClientRect();
             snaps.push(blockRect.bottom - pillRect.top);
           });
         } else {
-          // Livello 0: posizione iniziale (0)
           snaps.push(0);
-          // Livelli 1-5: per ogni block, la posizione in cui il bordo sinistro dello slider
-          // tocca il bordo destro del block
           blocks.forEach((block) => {
             const blockRect = block.getBoundingClientRect();
             snaps.push(blockRect.right - pillRect.left);
           });
         }
-        return snaps; // [livello0, livello1, ..., livello5]
+        return snaps;
       }
 
       // Gestisce l'inizio del drag
       function dragStart(e) {
         e.preventDefault();
         isDragging = true;
-        // Aggiorna l'asse in base alla viewport attuale
         dragAxis = window.innerWidth < 576 ? "vertical" : "horizontal";
         const pointerPos = getPointerPosition(e);
         if (dragAxis === "vertical") {
@@ -229,14 +322,11 @@
             ? pointerPos.y - startPointerPos
             : pointerPos.x - startPointerPos;
         let newPos = startSliderPos + delta;
-
-        // Limita il movimento all'intervallo definito dai confini (snap positions)
         const snaps = getSnapPositions();
         const minPos = snaps[0];
         const maxPos = snaps[snaps.length - 1];
         if (newPos < minPos) newPos = minPos;
         if (newPos > maxPos) newPos = maxPos;
-
         if (dragAxis === "vertical") {
           slider.style.top = newPos + "px";
         } else {
@@ -244,23 +334,24 @@
         }
       }
 
-      // Alla fine del drag, applica lo scatto allo snap più vicino rispetto alla posizione corrente
+      // Alla fine del drag, applica lo scatto più vicino e aggiorna la password
       function dragEnd(e) {
         isDragging = false;
         document.removeEventListener("mousemove", dragMove);
         document.removeEventListener("mouseup", dragEnd);
         document.removeEventListener("touchmove", dragMove);
         document.removeEventListener("touchend", dragEnd);
-
         const snaps = getSnapPositions();
         let currentPos =
           dragAxis === "vertical"
             ? parseInt(slider.style.top) || 0
             : parseInt(slider.style.left) || 0;
         let closestSnap = snaps[0];
+        let closestIndex = 0;
         for (let i = 1; i < snaps.length; i++) {
           if (Math.abs(snaps[i] - currentPos) < Math.abs(closestSnap - currentPos)) {
             closestSnap = snaps[i];
+            closestIndex = i;
           }
         }
         if (dragAxis === "vertical") {
@@ -268,6 +359,7 @@
         } else {
           slider.style.left = closestSnap + "px";
         }
+        updatePasswordDisplay(closestIndex);
       }
 
       // Event listeners
@@ -278,7 +370,7 @@
         console.log(modeButton.checked);
       });
 
-      // Posiziona lo slider al caricamento (all'inizio della slider pill)
+      // Inizializza la posizione dello slider e la visualizzazione della password
       setInitialPosition();
     </script>
   </body>
