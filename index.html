@@ -8,16 +8,16 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
         <style>
-            header .d-flex.container {
+            header > .container {
                 height: 100px;
             }
 
-            header label.rounded-pill {
+            header #Switch-container {
                 height: 40px;
                 width: 70px;
             }
 
-            header label.rounded-pill .Switch{
+            header #Switch{
                 height: 35px;
                 width: 35px;
                 top: 50%;
@@ -25,51 +25,51 @@
                 transform: translateY(-50%);
             }
 
-            main .d-flex.container {
+            main > .container {
                 height: calc(100vh - 4rem - 150px);
             }
 
-            main .Slider-pill .Pw-display {
+            main #Slider-pill #Pw-display {
                 font-family: 'Courier Prime', monospace;
                 font-size: 21px;
             }
 
             @media screen and (max-width: 575px) {
-                main .rounded-pill {
+                #Slider-pill {
                     height: 100%;
                     width: 70px;
                 }
 
-                main .rounded-pill .rounded-circle {
+                #Slider-pill .rounded-circle {
                     width: 100%;
                     height: 70px;
                 }
 
-                main .rounded-pill .Pw-display {
+                #Pw-display {
                     height: calc(100% - 140px);
                     width: 100%;
                 }
             }
 
             @media screen and (min-width: 576px) {
-                main .rounded-pill {
+                #Slider-pill {
                     height: 70px;
                     width: 100%;
                 }
 
-                main .rounded-pill .rounded-circle {
+                #Slider-pill .rounded-circle {
                     height: 100%;
                     width: 70px;
                 }
 
-                main .rounded-pill .Pw-display {
+                #Pw-display {
                     width: calc(100% - 140px);
                     height: 100%;
                 }
             }
 
             @media screen and (min-width: 768px) {
-                main .rounded-pill {
+                #Slider-pill {
                     width: 560px;
                 }
             }
@@ -82,8 +82,8 @@
                     Password Generator
                 </h1>
                 <div class="Mode-button">
-                    <label for="Light-mode" class="border border-primary rounded-pill position-relative">
-                        <div class="Switch border border-primary rounded-circle d-flex justify-content-center align-items-center position-absolute">
+                    <label id="Switch-container" for="Light-mode" class="border border-primary rounded-pill position-relative">
+                        <div id="Switch" class="border border-primary rounded-circle d-flex justify-content-center align-items-center position-absolute">
                             <!-- icon -->
                         </div>
                     </label>
@@ -93,10 +93,10 @@
         </header>
         <main>
             <div class="d-flex container border border-primary mt-1">
-                <div id="Slider" class="Slider-pill m-auto mx-sm-auto mt-sm-3 border border-danger rounded-pill d-flex flex-column flex-sm-row justify-content-between align-items-center position-relative">
-                    <div class="Slider bg-danger rounded-circle position-absolute"></div>
-                    <div class="border border-primary rounded-circle"></div>
-                    <div class="Pw-display border border-success rounded d-flex flex-column flex-sm-row align-items-stretch">
+                <div id="Slider-pill" class="Slider-pill m-auto mx-sm-auto mt-sm-3 border border-danger rounded-pill d-flex flex-column flex-sm-row justify-content-between align-items-center position-relative">
+                    <div id="Slider" class="Slider bg-danger rounded-circle position-absolute"></div>
+                    <div id="Copy" class="border border-primary rounded-circle"></div>
+                    <div id="Pw-display" class="border border-success rounded d-flex flex-column flex-sm-row align-items-stretch">
                         <section class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center">1111</section>
                         <section class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center">2222</section>
                         <section class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center">3333</section>
