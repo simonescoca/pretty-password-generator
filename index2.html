@@ -20,12 +20,10 @@
       header > .container {
         height: 100px;
       }
-
       header #Switch-container {
         height: 40px;
         width: 70px;
       }
-
       header #Switch {
         height: 35px;
         width: 35px;
@@ -33,50 +31,41 @@
         left: 1.5px;
         transform: translateY(-50%);
       }
-
       main > .container {
         height: calc(100vh - 4rem - 150px);
       }
-
       main #Slider-pill #Pw-display {
         font-family: "Courier Prime", monospace;
         font-size: 21px;
       }
-
       @media screen and (max-width: 575px) {
         #Slider-pill {
           height: 100%;
           width: 70px;
         }
-
         #Slider-pill .rounded-circle {
           width: 100%;
           height: 70px;
         }
-
         #Pw-display {
           height: calc(100% - 140px);
           width: 100%;
         }
       }
-
       @media screen and (min-width: 576px) {
         #Slider-pill {
           height: 70px;
           width: 100%;
         }
-
         #Slider-pill .rounded-circle {
           height: 100%;
           width: 70px;
         }
-
         #Pw-display {
           width: calc(100% - 140px);
           height: 100%;
         }
       }
-
       @media screen and (min-width: 768px) {
         #Slider-pill {
           width: 560px;
@@ -191,6 +180,8 @@
       }
 
       // Calcola e restituisce l'array delle posizioni di snap (livelli 0-5)
+      // In modalità verticale: lo slider si ferma quando il suo bordo superiore tocca il bordo inferiore di ogni .Block
+      // In modalità orizzontale: lo slider si ferma quando il suo bordo sinistro tocca il bordo destro di ogni .Block
       function getSnapPositions() {
         const pillRect = sliderPill.getBoundingClientRect();
         const pwDisplay = document.getElementById("Pw-display");
@@ -200,8 +191,8 @@
         if (dragAxis === "vertical") {
           // Livello 0: top di Pw-display
           snaps.push(pwRect.top - pillRect.top);
-          // Livelli 1-5: per ogni block, la posizione in cui lo slider si ferma
-          // quando il suo bordo superiore interseca il bordo inferiore del block
+          // Livelli 1-5: per ogni block, la posizione in cui il bordo superiore dello slider
+          // tocca il bordo inferiore del block
           blocks.forEach((block) => {
             const blockRect = block.getBoundingClientRect();
             snaps.push(blockRect.bottom - pillRect.top);
@@ -209,8 +200,8 @@
         } else {
           // Livello 0: sinistra di Pw-display
           snaps.push(pwRect.left - pillRect.left);
-          // Livelli 1-5: per ogni block, la posizione in cui lo slider si ferma
-          // quando il suo bordo sinistro interseca il bordo destro del block
+          // Livelli 1-5: per ogni block, la posizione in cui il bordo sinistro dello slider
+          // tocca il bordo destro del block
           blocks.forEach((block) => {
             const blockRect = block.getBoundingClientRect();
             snaps.push(blockRect.right - pillRect.left);
@@ -264,7 +255,7 @@
         }
       }
 
-      // Alla fine del drag, applica lo scatto in base al livello raggiunto
+      // Alla fine del drag, applica lo scatto allo snap più vicino rispetto alla posizione corrente
       function dragEnd(e) {
         isDragging = false;
         document.removeEventListener("mousemove", dragMove);
@@ -277,18 +268,16 @@
           dragAxis === "vertical"
             ? parseInt(slider.style.top) || 0
             : parseInt(slider.style.left) || 0;
-        let newLevel = 0;
-        // Determina il livello massimo per cui la posizione corrente è superiore o uguale
-        for (let i = 0; i < snaps.length; i++) {
-          if (currentPos >= snaps[i]) {
-            newLevel = i;
+        let closestSnap = snaps[0];
+        for (let i = 1; i < snaps.length; i++) {
+          if (Math.abs(snaps[i] - currentPos) < Math.abs(closestSnap - currentPos)) {
+            closestSnap = snaps[i];
           }
         }
-        // Applica lo scatto
         if (dragAxis === "vertical") {
-          slider.style.top = snaps[newLevel] + "px";
+          slider.style.top = closestSnap + "px";
         } else {
-          slider.style.left = snaps[newLevel] + "px";
+          slider.style.left = closestSnap + "px";
         }
       }
 
