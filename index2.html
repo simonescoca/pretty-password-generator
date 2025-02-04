@@ -151,23 +151,12 @@
 
       // Funzioni
 
-      // Imposta la posizione iniziale dello slider (livello 0)
+      // Imposta la posizione iniziale dello slider (all'inizio della slider pill)
       function setInitialPosition() {
         dragAxis = window.innerWidth < 576 ? "vertical" : "horizontal";
-        const pillRect = sliderPill.getBoundingClientRect();
-        const pwDisplay = document.getElementById("Pw-display");
-        const pwRect = pwDisplay.getBoundingClientRect();
-        if (dragAxis === "vertical") {
-          // Allinea lo slider al top di Pw-display
-          const snapPos = pwRect.top - pillRect.top;
-          slider.style.top = snapPos + "px";
-          slider.style.left = "0px";
-        } else {
-          // Allinea lo slider a sinistra di Pw-display
-          const snapPos = pwRect.left - pillRect.left;
-          slider.style.left = snapPos + "px";
-          slider.style.top = "0px";
-        }
+        // Posizione iniziale: 0 rispetto a sliderPill
+        slider.style.top = "0px";
+        slider.style.left = "0px";
       }
 
       // Ritorna la posizione del puntatore (mouse o touch)
@@ -189,8 +178,8 @@
         const blocks = document.querySelectorAll("#Pw-display .Block");
         let snaps = [];
         if (dragAxis === "vertical") {
-          // Livello 0: top di Pw-display
-          snaps.push(pwRect.top - pillRect.top);
+          // Livello 0: posizione iniziale (0)
+          snaps.push(0);
           // Livelli 1-5: per ogni block, la posizione in cui il bordo superiore dello slider
           // tocca il bordo inferiore del block
           blocks.forEach((block) => {
@@ -198,8 +187,8 @@
             snaps.push(blockRect.bottom - pillRect.top);
           });
         } else {
-          // Livello 0: sinistra di Pw-display
-          snaps.push(pwRect.left - pillRect.left);
+          // Livello 0: posizione iniziale (0)
+          snaps.push(0);
           // Livelli 1-5: per ogni block, la posizione in cui il bordo sinistro dello slider
           // tocca il bordo destro del block
           blocks.forEach((block) => {
@@ -289,7 +278,7 @@
         console.log(modeButton.checked);
       });
 
-      // Posiziona lo slider al caricamento (livello 0)
+      // Posiziona lo slider al caricamento (all'inizio della slider pill)
       setInitialPosition();
     </script>
   </body>
