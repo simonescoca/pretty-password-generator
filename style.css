@@ -2,13 +2,26 @@ header .d-flex.container {
     height: 100px;
 }
 
+header label.rounded-pill {
+    height: 40px;
+    width: 70px;
+}
+
+label.rounded-pill .Switch{
+    height: 35px;
+    width: 35px;
+    top: 50%;
+    left: 1.5px;
+    transform: translateY(-50%);
+}
+
 main .d-flex.container {
-    height: calc(100vh - 4rem - 100px);
+    height: calc(100vh - 4rem - 150px);
 }
 
 @media screen and (max-width: 575px) {
     main .rounded-pill {
-        height: 80%;
+        height: 100%;
         width: 70px;
     }
 
@@ -17,7 +30,7 @@ main .d-flex.container {
         height: 70px;
     }
 
-    main .rounded-pill .pw-display {
+    main .rounded-pill .Pw-display {
         height: calc(100% - 140px);
         width: 100%;
     }
@@ -34,7 +47,7 @@ main .d-flex.container {
         width: 70px;
     }
 
-    main .rounded-pill .pw-display {
+    main .rounded-pill .Pw-display {
         width: calc(100% - 140px);
         height: 100%;
     }

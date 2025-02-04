@@ -10,23 +10,31 @@
 </head>
 <body>
     <header>
-        <div class="d-flex container justify-content-between border border-dark mt-3">
-            <div class="title.">
-                title
-            </div>
-            <div class="mode-button.">
-                <label for="light-mode">
-                    light-mode
+        <div class="d-flex container justify-content-between align-items-center border border-dark mt-3">
+            <h1 class="Title">
+                Password Generator
+            </h1>
+            <div class="Mode-button">
+                <label for="Light-mode" class="border border-primary rounded-pill position-relative">
+                    <div class="Switch border border-primary rounded-circle d-flex justify-content-center align-items-center position-absolute">
+                        <!-- icon -->
+                    </div>
                 </label>
-                <input type="checkbox" id="light-mode">
+                <input type="checkbox" id="Light-mode" class="d-none">
             </div>
         </div>
     </header>
     <main>
-        <div class="d-flex container border border-primary mt-5">
+        <div class="d-flex container border border-primary mt-1">
             <div class="m-auto mx-sm-auto mt-sm-3 border border-danger rounded-pill d-flex flex-column flex-sm-row justify-content-between align-items-center">
                 <div class="border border-primary rounded-circle"></div>
-                <div class="border border-success rounded pw-display"></div>
+                <div class="Pw-display border border-success rounded d-flex flex-column flex-sm-row align-items-stretch">
+                    <section class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center">1</section>
+                    <section class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center">2</section>
+                    <section class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center">3</section>
+                    <section class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center">4</section>
+                    <section class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center">5</section>
+                </div>
                 <div class="border border-primary rounded-circle"></div>
             </div>
         </div>
