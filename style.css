@@ -7,7 +7,7 @@ header label.rounded-pill {
     width: 70px;
 }
 
-label.rounded-pill .Switch{
+header label.rounded-pill .Switch{
     height: 35px;
     width: 35px;
     top: 50%;
@@ -19,7 +19,7 @@ main .d-flex.container {
     height: calc(100vh - 4rem - 150px);
 }
 
-main .rounded-pill .Pw-display {
+main .Slider-pill .Pw-display {
     font-family: 'Courier Prime', monospace;
     font-size: 21px;
 }
