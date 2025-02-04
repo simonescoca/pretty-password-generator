@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slider Draggabile - Allineamento Corretto</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+  <style>
+    header .d-flex.container {
+      height: 100px;
+    }
+
+    header label.rounded-pill {
+      height: 40px;
+      width: 70px;
+    }
+
+    header label.rounded-pill .Switch {
+      height: 35px;
+      width: 35px;
+      top: 50%;
+      left: 1.5px;
+      transform: translateY(-50%);
+    }
+
+    main .d-flex.container {
+      height: calc(100vh - 4rem - 150px);
+    }
+
+    main .Slider-pill .Pw-display {
+      font-family: 'Courier Prime', monospace;
+      font-size: 21px;
+    }
+
+    @media screen and (max-width: 575px) {
+      main .rounded-pill {
+        height: 100%;
+        width: 70px;
+      }
+
+      main .rounded-pill .rounded-circle {
+        width: 100%;
+        height: 70px;
+      }
+
+      main .rounded-pill .Pw-display {
+        height: calc(100% - 140px);
+        width: 100%;
+      }
+    }
+
+    @media screen and (min-width: 576px) {
+      main .rounded-pill {
+        height: 70px;
+        width: 100%;
+      }
+
+      main .rounded-pill .rounded-circle {
+        height: 100%;
+        width: 70px;
+      }
+
+      main .rounded-pill .Pw-display {
+        width: calc(100% - 140px);
+        height: 100%;
+      }
+    }
+
+    @media screen and (min-width: 768px) {
+      main .rounded-pill {
+        width: 560px;
+      }
+    }
+
+    /* Indica che lo slider è trascinabile */
+    .Slider {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="d-flex container justify-content-between align-items-center border border-dark mt-3">
+      <h1 class="Title">Password Generator</h1>
+      <div class="Mode-button">
+        <label for="Light-mode" class="border border-primary rounded-pill position-relative">
+          <div class="Switch border border-primary rounded-circle d-flex justify-content-center align-items-center position-absolute">
+            <!-- icon -->
+          </div>
+        </label>
+        <input type="checkbox" id="Light-mode" class="d-none">
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="d-flex container border border-primary mt-1">
+      <div id="Slider" class="Slider-pill m-auto mx-sm-auto mt-sm-3 border border-danger rounded-pill d-flex flex-column flex-sm-row justify-content-between align-items-center position-relative">
+        <!-- "Pulsante" dello slider -->
+        <div class="Slider bg-danger rounded-circle position-absolute"></div>
+        <div class="border border-primary rounded-circle"></div>
+        <div class="Pw-display border border-success rounded d-flex flex-column flex-sm-row align-items-stretch">
+          <section class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center">1111</section>
+          <section class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center">2222</section>
+          <section class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center">3333</section>
+          <section class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center">4444</section>
+          <section class="Block border border-danger rounded flex-fill d-flex justify-content-center align-items-center">5555</section>
+        </div>
+        <div class="border border-primary rounded-circle"></div>
+      </div>
+    </div>
+  </main>
+  <script>
+    // Modalità Light-mode
+    const modeButton = document.getElementById("Light-mode");
+    modeButton.addEventListener("click", () => {
+      console.log(modeButton.checked);
+    });
+
+    // Funzionalità drag per lo slider
+    document.addEventListener('DOMContentLoaded', function() {
+      const slider = document.querySelector('#Slider .Slider');
+      const sliderContainer = document.getElementById('Slider');
+      let dragging = false,
+          startX = 0,
+          startY = 0,
+          initialLeft = 0,
+          initialTop = 0;
+
+      function setInitialPosition() {
+        const viewportWidth = window.innerWidth;
+        const containerRect = sliderContainer.getBoundingClientRect();
+        const sliderRect = slider.getBoundingClientRect();
+        slider.style.top = '0px';
+        slider.style.left = '0px';
+      }
+
+      // Posizionamento iniziale
+      setInitialPosition();
+      // Riallinea in caso di resize della finestra
+      window.addEventListener('resize', setInitialPosition);
+
+      // Gestione del drag con il mouse
+      function onMouseDown(e) {
+        dragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        initialLeft = parseFloat(getComputedStyle(slider).left) || 0;
+        initialTop = parseFloat(getComputedStyle(slider).top) || 0;
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      }
+
+      function onMouseMove(e) {
+        if (!dragging) return;
+        const viewportWidth = window.innerWidth;
+        const containerRect = sliderContainer.getBoundingClientRect();
+        const sliderRect = slider.getBoundingClientRect();
+
+        if (viewportWidth < 576) {
+          // Movimento verticale
+          let dy = e.clientY - startY;
+          let newTop = initialTop + dy;
+          newTop = Math.max(0, newTop);
+          newTop = Math.min(containerRect.height - sliderRect.height, newTop);
+          slider.style.top = newTop + 'px';
+        } else {
+          // Movimento orizzontale
+          let dx = e.clientX - startX;
+          let newLeft = initialLeft + dx;
+          newLeft = Math.max(0, newLeft);
+          newLeft = Math.min(containerRect.width - sliderRect.width, newLeft);
+          slider.style.left = newLeft + 'px';
+        }
+      }
+
+      function onMouseUp() {
+        dragging = false;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      }
+
+      slider.addEventListener('mousedown', onMouseDown);
+
+      // Gestione del drag su dispositivi touch
+      slider.addEventListener('touchstart', function(e) {
+        dragging = true;
+        const touch = e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        initialLeft = parseFloat(getComputedStyle(slider).left) || 0;
+        initialTop = parseFloat(getComputedStyle(slider).top) || 0;
+        document.addEventListener('touchmove', onTouchMove, { passive: false });
+        document.addEventListener('touchend', onTouchEnd);
+      });
+
+      function onTouchMove(e) {
+        if (!dragging) return;
+        const touch = e.touches[0];
+        const viewportWidth = window.innerWidth;
+        const containerRect = sliderContainer.getBoundingClientRect();
+        const sliderRect = slider.getBoundingClientRect();
+
+        if (viewportWidth < 576) {
+          let dy = touch.clientY - startY;
+          let newTop = initialTop + dy;
+          newTop = Math.max(0, newTop);
+          newTop = Math.min(containerRect.height - sliderRect.height, newTop);
+          slider.style.top = newTop + 'px';
+        } else {
+          let dx = touch.clientX - startX;
+          let newLeft = initialLeft + dx;
+          newLeft = Math.max(0, newLeft);
+          newLeft = Math.min(containerRect.width - sliderRect.width, newLeft);
+          slider.style.left = newLeft + 'px';
+        }
+        // Previeni lo scroll della pagina durante il drag
+        e.preventDefault();
+      }
+
+      function onTouchEnd() {
+        dragging = false;
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+      }
+    });
+  </script>
+</body>
+</html>
