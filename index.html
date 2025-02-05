@@ -45,7 +45,6 @@
         top: 50%;
         transform: translateY(-50%);
         transition: transform 0.3s ease;
-        /* border: 1px solid #C9A13F; */
         box-shadow: 0px 0px 10px 6px #C9A13FBF;
       }
 
@@ -91,7 +90,7 @@
         background-color: #5445CB;
         color: #FFFFFF;
         font-size: 25px;
-        transition: all 0.2s ease;
+        transition: all 0.1s ease;
       }
 
       #Slider i.position-absolute {
@@ -318,19 +317,16 @@
         updateSliderIcon();
       }
 
-    // Funzione per aggiornare l'icona dello slider in base al livello e alla viewport
     function updateSliderIcon() {
         let iconClass = "", iconClassI = "", iconClassII = "";
         if (currentLevel === 0 || currentLevel === 5) {
             if (window.innerWidth < 576) {
-                // Movimento verticale
                 if (currentLevel === 0) {
                     iconClass = "fa-arrow-down-long";
                 } else {
                     iconClass = "fa-arrow-up-long";
                 }
             } else {
-                // Movimento orizzontale
                 if (currentLevel === 0) {
                     iconClass = "fa-arrow-right-long";
                 } else {
@@ -553,7 +549,7 @@
       copyDiv.addEventListener("keydown", (e) => e.key === "Enter" && copyPassword());
 
       modeButton.addEventListener("change", modeLogic);
-      window.addEventListener("resize", setInitialPosition);
+    //   window.addEventListener("resize", setInitialPosition);  // non possiamo resettare la posizione al resize della window, dobbiamo salvare la posizione dello slider e riposizionare lo slider a quella posizione una volta terminato il resize, senza però che la password cambi.
       slider.addEventListener("mousedown", dragStart);
       slider.addEventListener("touchstart", dragStart, { passive: false });
 
