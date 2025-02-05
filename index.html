@@ -17,45 +17,112 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
     />
     <style>
+      body {
+          background-color: #DDD9FF;
+      }
+
       header > .container {
         height: 100px;
       }
+
       header #Switch-container {
         height: 40px;
         width: 70px;
+        cursor: pointer;
+        background: #96E6FF;
+        box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s ease;
+        border: 1px solid #0093C0;
       }
+
       header #Switch {
         height: 35px;
         width: 35px;
-        top: 50%;
+        position: absolute;
+        background: #FED87D;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         left: 1.5px;
+        top: 50%;
         transform: translateY(-50%);
+        transition: transform 0.3s ease;
+        /* border: 1px solid #C9A13F; */
+        box-shadow: 0px 0px 10px 6px #C9A13FBF;
       }
+
+      body.dark-mode header #Switch-container {
+        background: #201C49;
+        box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+        border: 1px solid #BFBAFF;
+      }
+
+      body.dark-mode header #Switch {
+        transform: translateX(calc(100% - 5px)) translateY(-50%);
+        background: #BEBBE0;
+        box-shadow: 0px 0px 10px 3.5px #BFBAFFB0;
+      }
+
       main > .container {
         height: calc(100vh - 4rem - 150px);
       }
+
+      main #Slider-pill {
+        border: 2px solid #44398D;
+        box-shadow: -4px 4px 8px 0px #44398D;
+      }
+      
+      body.dark-mode main #Slider-pill {
+        border-color: #BFBAFF;
+        box-shadow: 0px 0px 18px 0px #9F9BBA
+      }
+
+      #Slider-pill .rounded-circle {
+        width: 66px;
+        height: 66px;
+      }
+
+      main #Slider-pill #Copy {
+        background-color: #8E84FF;
+        color: #FFFFFF;
+        font-size: 25px;
+        transition: all 0.2s ease;
+      }
+
+      main #Slider-pill #Slider {
+        background-color: #5445CB;
+        color: #FFFFFF;
+        font-size: 25px;
+        transition: all 0.2s ease;
+      }
+
+      #Slider i.position-absolute {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      #Copy:active {
+        transform: scale(92%, 92%);
+      }
+
       main #Slider-pill #Pw-display {
         font-family: "Courier Prime", monospace;
         font-size: 21px;
       }
+
       @media screen and (max-width: 575px) {
         #Slider-pill {
           height: 100%;
           width: 70px;
         }
-        #Slider-pill .rounded-circle {
-          width: 100%;
-          height: 70px;
-        }
         #Pw-display {
-          height: calc(100% - 140px);
+          height: calc(100% - 132px);
           width: 100%;
         }
         #Pw-display .Block {
           width: 100%;
           height: 20%;
         }
-        #Pw-display .Block:not(:last-child)::after {
+        #Pw-display .Block.has-next::after {
           content: " ";
           display: table;
           position: absolute;
@@ -68,24 +135,21 @@
           border-radius: 1px;
         }
       }
+
       @media screen and (min-width: 576px) {
         #Slider-pill {
           height: 70px;
           width: 100%;
         }
-        #Slider-pill .rounded-circle {
-          height: 100%;
-          width: 70px;
-        }
         #Pw-display {
-          width: calc(100% - 140px);
+          width: calc(100% - 132px);
           height: 100%;
         }
         #Pw-display .Block {
           height: 100%;
           width: 20%;
         }
-        #Pw-display .Block:not(:last-child)::after {
+        #Pw-display .Block.has-next::after {
           content: " ";
           display: table;
           position: absolute;
@@ -98,12 +162,13 @@
           border-radius: 1px;
         }
       }
+
       @media screen and (min-width: 768px) {
         #Slider-pill {
           width: 560px;
         }
       }
-      /* Stile per il pop-up di notifica */
+
       #copyNotification {
         position: fixed;
         top: 20px;
@@ -119,80 +184,69 @@
         font-size: 16px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
       }
+
+      body.dark-mode {
+        background-color: #2E2672;
+        color: #e0e0e0;
+      }
+
+      body.dark-mode #copyNotification {
+        background: #155724;
+        color: #d4edda;
+        border-color: #0c3318;
+      }
+
+      body.dark-mode .Block.has-next::after {
+        background: #e0e0e0 !important;
+      }
     </style>
   </head>
   <body>
     <header>
-      <div
-        class="d-flex container justify-content-between align-items-center border border-dark mt-3"
-      >
+      <div class="d-flex container justify-content-between align-items-center mt-3">
         <h1 class="Title">Password Generator</h1>
         <div>
           <label
             id="Switch-container"
             for="Mode-button"
-            class="border border-primary rounded-pill position-relative"
+            class="rounded-pill position-relative"
           >
             <div
               id="Switch"
-              class="border border-primary rounded-circle d-flex justify-content-center align-items-center position-absolute"
-            >
-              <!-- icon -->
-            </div>
+              class="rounded-circle d-flex justify-content-center align-items-center position-absolute"
+            ></div>
           </label>
           <input type="checkbox" id="Mode-button" class="d-none" />
         </div>
       </div>
     </header>
     <main>
-      <div class="d-flex container border border-primary mt-1">
+      <div class="d-flex container mt-1">
         <div
           id="Slider-pill"
-          class="m-auto mx-sm-auto mt-sm-3 border border-danger rounded-pill d-flex flex-column flex-sm-row justify-content-between align-items-center position-relative"
+          class="m-auto mx-sm-auto mt-sm-3 rounded-pill d-flex flex-column flex-sm-row justify-content-between align-items-center position-relative"
         >
-          <!-- Div per la copia (con tabindex per renderlo focusable) -->
-          <div id="Copy" class="border border-primary rounded-circle" tabindex="0"></div>
-          <div
-            id="Pw-display"
-            class="border border-success rounded d-sm-flex"
-          >
-            <section
-              class="Block border border-danger rounded d-flex justify-content-center align-items-center position-relative"
-            >
-              1111
-            </section>
-            <section
-              class="Block border border-danger rounded d-flex justify-content-center align-items-center position-relative"
-            >
-              2222
-            </section>
-            <section
-              class="Block border border-danger rounded d-flex justify-content-center align-items-center position-relative"
-            >
-              3333
-            </section>
-            <section
-              class="Block border border-danger rounded d-flex justify-content-center align-items-center position-relative"
-            >
-              4444
-            </section>
-            <section
-              class="Block border border-danger rounded d-flex justify-content-center align-items-center position-relative"
-            >
-              5555
-            </section>
+          <div id="Copy" class="rounded-circle d-flex justify-content-center align-items-center">
+            <i class="fa-regular fa-copy"></i>
           </div>
-          <div class="border border-primary rounded-circle"></div>
-          <div id="Slider" class="bg-danger rounded-circle position-absolute"></div>
+          <div id="Pw-display" class="d-sm-flex">
+            <section class="Block d-flex justify-content-center align-items-center position-relative"></section>
+            <section class="Block d-flex justify-content-center align-items-center position-relative"></section>
+            <section class="Block d-flex justify-content-center align-items-center position-relative"></section>
+            <section class="Block d-flex justify-content-center align-items-center position-relative"></section>
+            <section class="Block d-flex justify-content-center align-items-center position-relative"></section>
+          </div>
+          <div class="rounded-circle"></div>
+          <div id="Slider" class="rounded-circle position-absolute d-flex justify-content-center align-items-center">
+            <!-- L'icona verrà inserita via JavaScript -->
+          </div>
         </div>
       </div>
     </main>
-    <!-- Pop-up di notifica -->
     <div id="copyNotification">
       <i class="fas fa-check" style="margin-right: 8px;"></i> Password copiata
     </div>
     <script>
-      // Dichiarazioni e inizializzazioni delle variabili
       const slider = document.getElementById("Slider");
       const sliderPill = document.getElementById("Slider-pill");
       const modeButton = document.getElementById("Mode-button");
@@ -201,8 +255,9 @@
       let dragAxis = window.innerWidth < 576 ? "vertical" : "horizontal";
       let startPointerPos = 0;
       let startSliderPos = 0;
+      let initialLevel = 0;
+      let hasCrossedBoundary = false;
 
-      // FUNZIONI PER GENERARE LE PASSWORD
       function genRandomIndex(len) {
         const arr = new Uint32Array(1);
         window.crypto.getRandomValues(arr);
@@ -221,17 +276,8 @@
           for (let i = 0; i < 4 * level; i++) {
             const boundary = (i % 4 === 0 || i % 4 === 3);
             const options = boundary
-              ? [
-                  ABC[genRandomIndex(ABC.length)],
-                  abc[genRandomIndex(abc.length)],
-                  nums[genRandomIndex(nums.length)]
-                ]
-              : [
-                  ABC[genRandomIndex(ABC.length)],
-                  abc[genRandomIndex(abc.length)],
-                  nums[genRandomIndex(nums.length)],
-                  chars[genRandomIndex(chars.length)]
-                ];
+              ? [ABC[genRandomIndex(ABC.length)], abc[genRandomIndex(abc.length)], nums[genRandomIndex(nums.length)]]
+              : [ABC[genRandomIndex(ABC.length)], abc[genRandomIndex(abc.length)], nums[genRandomIndex(nums.length)], chars[genRandomIndex(chars.length)]];
             const chosen = options[genRandomIndex(options.length)];
             password += chosen;
             if (ABC.includes(chosen)) checkCap = true;
@@ -246,18 +292,64 @@
       function updatePasswordDisplay(level) {
         const pwDisplay = document.getElementById("Pw-display");
         const blocks = pwDisplay.querySelectorAll(".Block");
+        
+        blocks.forEach(block => {
+          block.textContent = "";
+          block.classList.remove("has-next");
+        });
+
         if (level === 0) {
-          blocks.forEach((block) => (block.textContent = ""));
+          updateSliderIcon();
           return;
         }
+
         const password = generatePw(level);
         const groups = password.split("-");
+
         blocks.forEach((block, index) => {
-          block.textContent = groups[index] || "";
+          if(index < groups.length) {
+            block.textContent = groups[index];
+            const nextBlock = blocks[index + 1];
+            if(nextBlock && groups[index + 1]) {
+              block.classList.add("has-next");
+            }
+          }
         });
+        updateSliderIcon();
       }
 
-      // FUNZIONI DI GESTIONE DELLO SLIDER
+    // Funzione per aggiornare l'icona dello slider in base al livello e alla viewport
+    function updateSliderIcon() {
+        let iconClass = "", iconClassI = "", iconClassII = "";
+        if (currentLevel === 0 || currentLevel === 5) {
+            if (window.innerWidth < 576) {
+                // Movimento verticale
+                if (currentLevel === 0) {
+                    iconClass = "fa-arrow-down-long";
+                } else {
+                    iconClass = "fa-arrow-up-long";
+                }
+            } else {
+                // Movimento orizzontale
+                if (currentLevel === 0) {
+                    iconClass = "fa-arrow-right-long";
+                } else {
+                    iconClass = "fa-arrow-left-long";
+                }
+            }
+            slider.innerHTML = `<i class="fa-solid ${iconClass} position-absolute"></i>`;
+        } else {
+            if (window.innerWidth < 576) {
+                iconClassI = "fa-arrow-down-long";
+                iconClassII = "fa-arrow-up-long";
+            } else {
+                iconClassI = "fa-arrow-right-long";
+                iconClassII = "fa-arrow-left-long";
+            }
+            slider.innerHTML = `<i class="fa-solid ${iconClassI} position-absolute"></i><i class="fa-solid ${iconClassII} position-absolute"></i>`;
+        }
+    }
+
       function setInitialPosition() {
         dragAxis = window.innerWidth < 576 ? "vertical" : "horizontal";
         slider.style.top = "0px";
@@ -267,45 +359,53 @@
       }
 
       function getPointerPosition(e) {
-        if (e.touches) {
-          return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        } else {
-          return { x: e.clientX, y: e.clientY };
-        }
+        return e.touches
+          ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+          : { x: e.clientX, y: e.clientY };
       }
 
       function getSnapPositions() {
         const pillRect = sliderPill.getBoundingClientRect();
         const blocks = document.querySelectorAll("#Pw-display .Block");
-        let snaps = [];
-        if (dragAxis === "vertical") {
-          snaps.push(0);
-          blocks.forEach((block) => {
-            const blockRect = block.getBoundingClientRect();
-            snaps.push(blockRect.bottom - pillRect.top);
-          });
-        } else {
-          snaps.push(0);
-          blocks.forEach((block) => {
-            const blockRect = block.getBoundingClientRect();
-            snaps.push(blockRect.right - pillRect.left);
-          });
-        }
+        let snaps = [0];
+        
+        blocks.forEach(block => {
+          const blockRect = block.getBoundingClientRect();
+          snaps.push(
+            dragAxis === "vertical"
+              ? blockRect.bottom - pillRect.top - 2
+              : blockRect.right - pillRect.left - 2
+          );
+        });
         return snaps;
+      }
+
+      function calculateCurrentLevel(currentPos, snaps) {
+        let level = 0;
+        for (let i = snaps.length - 1; i >= 0; i--) {
+          if (snaps[i] <= currentPos) {
+            level = i;
+            break;
+          }
+        }
+        return level;
       }
 
       function dragStart(e) {
         e.preventDefault();
         isDragging = true;
+        initialLevel = currentLevel;
+        hasCrossedBoundary = false;
         dragAxis = window.innerWidth < 576 ? "vertical" : "horizontal";
         const pointerPos = getPointerPosition(e);
-        if (dragAxis === "vertical") {
-          startPointerPos = pointerPos.y;
-          startSliderPos = parseInt(slider.style.top) || 0;
-        } else {
-          startPointerPos = pointerPos.x;
-          startSliderPos = parseInt(slider.style.left) || 0;
-        }
+        const sliderPos =
+          dragAxis === "vertical"
+            ? parseInt(slider.style.top) || 0
+            : parseInt(slider.style.left) || 0;
+        
+        startPointerPos = dragAxis === "vertical" ? pointerPos.y : pointerPos.x;
+        startSliderPos = sliderPos;
+
         document.addEventListener("mousemove", dragMove);
         document.addEventListener("mouseup", dragEnd);
         document.addEventListener("touchmove", dragMove, { passive: false });
@@ -316,13 +416,23 @@
         if (!isDragging) return;
         e.preventDefault();
         const pointerPos = getPointerPosition(e);
-        let delta = dragAxis === "vertical" ? pointerPos.y - startPointerPos : pointerPos.x - startPointerPos;
+        const delta =
+          dragAxis === "vertical"
+            ? pointerPos.y - startPointerPos
+            : pointerPos.x - startPointerPos;
+        
         let newPos = startSliderPos + delta;
         const snaps = getSnapPositions();
-        const minPos = snaps[0];
-        const maxPos = snaps[snaps.length - 1];
-        if (newPos < minPos) newPos = minPos;
-        if (newPos > maxPos) newPos = maxPos;
+        newPos = Math.max(snaps[0], Math.min(snaps[snaps.length - 1], newPos));
+
+        const targetLevel = calculateCurrentLevel(newPos, snaps);
+        
+        if (targetLevel !== currentLevel) {
+          hasCrossedBoundary = true;
+          currentLevel = targetLevel;
+          updatePasswordDisplay(currentLevel);
+        }
+
         if (dragAxis === "vertical") {
           slider.style.top = newPos + "px";
         } else {
@@ -332,162 +442,123 @@
 
       function dragEnd(e) {
         isDragging = false;
-        document.removeEventListener("mousemove", dragMove);
-        document.removeEventListener("mouseup", dragEnd);
-        document.removeEventListener("touchmove", dragMove);
-        document.removeEventListener("touchend", dragEnd);
+        ["mousemove", "mouseup", "touchmove", "touchend"].forEach(event =>
+          document.removeEventListener(event, dragEnd)
+        );
+
         const snaps = getSnapPositions();
-        let currentPos = dragAxis === "vertical" ? parseInt(slider.style.top) || 0 : parseInt(slider.style.left) || 0;
-        let closestSnap = snaps[0];
+        const currentPos =
+          dragAxis === "vertical"
+            ? parseInt(slider.style.top) || 0
+            : parseInt(slider.style.left) || 0;
+        
         let closestIndex = 0;
-        for (let i = 1; i < snaps.length; i++) {
-          if (Math.abs(snaps[i] - currentPos) < Math.abs(closestSnap - currentPos)) {
-            closestSnap = snaps[i];
-            closestIndex = i;
+        snaps.forEach((snap, index) => {
+          if (Math.abs(snap - currentPos) < Math.abs(snaps[closestIndex] - currentPos)) {
+            closestIndex = index;
           }
+        });
+
+        if (closestIndex !== currentLevel || (closestIndex === initialLevel && hasCrossedBoundary)) {
+          currentLevel = closestIndex;
+          updatePasswordDisplay(currentLevel);
         }
+
         if (dragAxis === "vertical") {
-          slider.style.top = closestSnap + "px";
+          slider.style.top = snaps[closestIndex] + "px";
         } else {
-          slider.style.left = closestSnap + "px";
+          slider.style.left = snaps[closestIndex] + "px";
         }
-        currentLevel = closestIndex;
-        updatePasswordDisplay(closestIndex);
       }
 
       function moveSliderToLevel(newLevel) {
         const snaps = getSnapPositions();
-        if (newLevel < 0) newLevel = 0;
-        if (newLevel >= snaps.length) newLevel = snaps.length - 1;
-        const axis = window.innerWidth < 576 ? "vertical" : "horizontal";
-        if (axis === "vertical") {
+        newLevel = Math.max(0, Math.min(snaps.length - 1, newLevel));
+        
+        if (dragAxis === "vertical") {
           slider.style.top = snaps[newLevel] + "px";
         } else {
           slider.style.left = snaps[newLevel] + "px";
         }
+        
         currentLevel = newLevel;
         updatePasswordDisplay(newLevel);
       }
 
-      // Funzione per mostrare il pop-up di notifica per 2 secondi
       function showCopyNotification() {
         const notif = document.getElementById("copyNotification");
         notif.style.display = "block";
-        setTimeout(() => {
-          notif.style.display = "none";
-        }, 2000);
+        setTimeout(() => (notif.style.display = "none"), 2000);
       }
 
-      // Fallback per copiare il testo (vecchio metodo) su dispositivi mobili
-      function fallbackCopyTextToClipboard(text) {
-        var textArea = document.createElement("textarea");
-        textArea.value = text;
-        // Evita lo scroll
-        textArea.style.top = "0";
-        textArea.style.left = "0";
-        textArea.style.position = "fixed";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-          var successful = document.execCommand("copy");
-          if (successful) {
-            showCopyNotification();
-          } else {
-            console.error("Fallback: comando copy non riuscito");
-          }
-        } catch (err) {
-          console.error("Fallback: impossibile copiare", err);
-        }
-        document.body.removeChild(textArea);
-      }
-
-      // Funzione per copiare la password con fallback su mobile
       function copyPassword() {
-        const blocks = document.querySelectorAll("#Pw-display .Block");
-        const password = Array.from(blocks)
+        const password = Array.from(document.querySelectorAll("#Pw-display .Block"))
           .map((block) => block.textContent)
-          .filter((text) => text !== "")
+          .filter((text) => text)
           .join("-");
-        if (password) {
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard
-              .writeText(password)
-              .then(() => {
-                showCopyNotification();
-              })
-              .catch((err) => {
-                // Se la copia con l'API moderna fallisce, uso il fallback
-                fallbackCopyTextToClipboard(password);
-              });
-          } else {
-            // Se l'API moderna non è supportata, uso il fallback
-            fallbackCopyTextToClipboard(password);
-          }
+        
+        if (!password) return;
+
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(password).then(showCopyNotification);
+        } else {
+          const textArea = document.createElement("textarea");
+          textArea.value = password;
+          textArea.style.position = "fixed";
+          document.body.appendChild(textArea);
+          textArea.select();
+          try {
+            document.execCommand("copy") && showCopyNotification();
+          } catch (e) {}
+          document.body.removeChild(textArea);
         }
       }
 
-      // Listener per input da tastiera (globale)
-      document.addEventListener("keydown", function (e) {
-        // Verifica se il dispositivo è desktop (senza touch)
+      function modeLogic() {
+        document.body.classList.toggle("dark-mode", modeButton.checked);
+      }
+
+      document.addEventListener("keydown", (e) => {
         const isDesktop = !("ontouchstart" in window);
         let newLevel = currentLevel;
-        if (e.key === "ArrowUp" || e.key === "Up") {
-          e.preventDefault();
-          if (window.innerWidth < 576) {
-            newLevel = currentLevel - 1;
-          } else {
-            newLevel = currentLevel + 1;
-          }
-        } else if (e.key === "ArrowDown" || e.key === "Down") {
-          e.preventDefault();
-          if (window.innerWidth < 576) {
-            newLevel = currentLevel + 1;
-          } else {
-            newLevel = currentLevel - 1;
-          }
-        } else if (e.key === "ArrowRight" || e.key === "Right") {
-          e.preventDefault();
-          newLevel = currentLevel + 1;
-        } else if (e.key === "ArrowLeft" || e.key === "Left") {
-          e.preventDefault();
-          newLevel = currentLevel - 1;
-        } else if (e.key === "Enter") {
-          // Su desktop, premendo Invio copia la password (indipendentemente dalla viewport)
-          if (isDesktop) {
-            e.preventDefault();
-            copyPassword();
-          }
+        
+        switch (e.key) {
+          case "ArrowUp":
+          case "Up":
+            newLevel = window.innerWidth < 576 ? currentLevel - 1 : currentLevel + 1;
+            break;
+          case "ArrowDown":
+          case "Down":
+            newLevel = window.innerWidth < 576 ? currentLevel + 1 : currentLevel - 1;
+            break;
+          case "ArrowRight":
+          case "Right":
+            newLevel++;
+            break;
+          case "ArrowLeft":
+          case "Left":
+            newLevel--;
+            break;
+          case "Enter":
+            if (isDesktop) copyPassword();
+            break;
         }
-        if (newLevel !== currentLevel) {
-          moveSliderToLevel(newLevel);
-        }
+        
+        if (newLevel !== currentLevel) moveSliderToLevel(newLevel);
       });
 
-      // Listener per il div#Copy: uso pointerup per coprire sia click che touch
       const copyDiv = document.getElementById("Copy");
-      copyDiv.addEventListener("pointerup", function (e) {
-        e.preventDefault();
-        copyPassword();
-      });
-      // Per sicurezza anche click e keydown (Invio)
+      copyDiv.addEventListener("pointerup", copyPassword);
       copyDiv.addEventListener("click", copyPassword);
-      copyDiv.addEventListener("keydown", function (e) {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          copyPassword();
-        }
-      });
+      copyDiv.addEventListener("keydown", (e) => e.key === "Enter" && copyPassword());
 
+      modeButton.addEventListener("change", modeLogic);
       window.addEventListener("resize", setInitialPosition);
       slider.addEventListener("mousedown", dragStart);
       slider.addEventListener("touchstart", dragStart, { passive: false });
-      modeButton.addEventListener("click", () => {
-        console.log(modeButton.checked);
-      });
 
-      // Inizializza la posizione dello slider e la visualizzazione della password
-      setInitialPosition();
+      document.addEventListener("DOMContentLoaded", modeLogic);
+      document.addEventListener("DOMContentLoaded", setInitialPosition);
     </script>
   </body>
 </html>
