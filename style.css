@@ -65,6 +65,7 @@ main > .container {
 main #Slider-pill {
     border: 2px solid #44398d;
     box-shadow: -4px 4px 8px 0px #44398d;
+    transition: all 0.2s;
 }
 
 body.dark-mode main #Slider-pill {
