@@ -75,8 +75,7 @@
         font-size: 25px;
         transition: all 0.2s ease;
       }
-      #Copy:active,
-      #Copy.active,
+      /* Effetto :active per Copy e per Slider */
       #Slider.active {
         transform: scale(80%);
       }
@@ -95,11 +94,10 @@
         font-family: "Courier Prime", monospace;
         font-size: 21px;
       }
-      /* Modifica: forza il colore del testo di #Pw-display sempre a #44398D */
+      /* Forza il colore del testo di #Pw-display sempre a #44398D */
       #Pw-display {
         color: #44398D !important;
       }
-
       #Pw-display .Block.has-next::after {
         content: " ";
         display: table;
@@ -244,6 +242,8 @@
       const slider = document.getElementById("Slider");
       const sliderPill = document.getElementById("Slider-pill");
       const modeButton = document.getElementById("Mode-button");
+      const copyDiv = document.getElementById("Copy");  // Spostato qui per essere subito disponibile
+
       let currentLevel = 0;
       let isDragging = false;
       let dragAxis = window.innerWidth < 576 ? "vertical" : "horizontal";
@@ -271,6 +271,15 @@
         }
         sliderPill.style.backgroundColor = color;
         slider.style.borderColor = color;
+      }
+
+      // Funzione per aggiornare lo stato del pulsante "Copy" in base al livello corrente
+      function copyButtonHandler() {
+        if (currentLevel === 0) {
+          copyDiv.style.transform = "scale(0)";
+        } else {
+          copyDiv.style.transform = "scale(1)";
+        }
       }
 
       // Crea le tacche (ticks) nello slider
@@ -343,7 +352,7 @@
         return password.match(/.{1,4}/g).join("-");
       }
 
-      // Aggiorna la visualizzazione della password e lo slider
+      // Aggiorna la visualizzazione della password e dello slider
       function updatePasswordDisplay(level) {
         updatePillBackground(level, document.body.classList.contains("dark-mode"));
         const pwDisplay = document.getElementById("Pw-display");
@@ -356,6 +365,7 @@
 
         if (level === 0) {
           updateSliderIcon();
+          copyButtonHandler();
           return;
         }
 
@@ -371,6 +381,7 @@
           }
         });
         updateSliderIcon();
+        copyButtonHandler();
       }
 
       // Aggiorna l'icona dello slider in base al livello corrente
@@ -658,25 +669,23 @@
         if (newLevel !== currentLevel) moveSliderToLevel(newLevel);
       });
 
-        // Gestione del border-color dello #Slider
-        document.addEventListener("keydown", (e) => {
-          const possibleKeys = ["ArrowUp", "Up", "ArrowDown", "Down", "ArrowRight", "Right", "ArrowLeft", "Left"];
-          possibleKeys.forEach(key => {
-            if (key === e.key) slider.classList.add("active");
-          });
+      // Gestione del border-color dello #Slider
+      document.addEventListener("keydown", (e) => {
+        const possibleKeys = ["ArrowUp", "Up", "ArrowDown", "Down", "ArrowRight", "Right", "ArrowLeft", "Left"];
+        possibleKeys.forEach(key => {
+          if (key === e.key) slider.classList.add("active");
         });
+      });
 
-        // Gestione del border-color dello #Slider
-        document.addEventListener("keyup", (e) => {
-          const possibleKeys = ["ArrowUp", "Up", "ArrowDown", "Down", "ArrowRight", "Right", "ArrowLeft", "Left"];
-          possibleKeys.forEach(key => {
-            if (key === e.key) slider.classList.remove("active");
-          });
+      // Gestione del border-color dello #Slider
+      document.addEventListener("keyup", (e) => {
+        const possibleKeys = ["ArrowUp", "Up", "ArrowDown", "Down", "ArrowRight", "Right", "ArrowLeft", "Left"];
+        possibleKeys.forEach(key => {
+          if (key === e.key) slider.classList.remove("active");
         });
+      });
 
       // Event listeners per copia e tema
-      const copyDiv = document.getElementById("Copy");
-
       document.addEventListener("keydown", (e) => {
         if (e.key === "Enter") copyDiv.classList.add("active");
       });
@@ -685,6 +694,8 @@
         if (e.key === "Enter") copyDiv.classList.remove("active");
       });
 
+      copyDiv.addEventListener("pointerdown", () => {copyDiv.style.transform = "scale(80%)"});
+      copyDiv.addEventListener("pointerup", () => {copyDiv.style.transform = "scale(100%)"});
       copyDiv.addEventListener("pointerup", copyPassword);
       copyDiv.addEventListener("click", copyPassword);
       // Nuovi event handler per simulare l'effetto :active quando si preme Invio
