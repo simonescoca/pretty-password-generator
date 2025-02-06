@@ -75,18 +75,11 @@
         font-size: 25px;
         transition: all 0.2s ease;
       }
-      /* Aggiunto per simulare l'effetto :active anche su classe active */
       #Copy:active,
-      #Copy.active {
-        transform: scale(0.92);
-      }
-
-      /* non funziona e non si sa perché */
+      #Copy.active,
       #Slider.active {
-        border-width: 10px;
-        border-color: white;
+        transform: scale(80%);
       }
-
       main #Slider-pill #Slider {
         background-color: #5445cb;
         color: #ffffff;
@@ -281,6 +274,7 @@
           color = colors[level + 1];
         }
         sliderPill.style.backgroundColor = color;
+        slider.style.borderColor = color;
       }
 
       // Crea le tacche (ticks) nello slider
@@ -667,6 +661,22 @@
         }
         if (newLevel !== currentLevel) moveSliderToLevel(newLevel);
       });
+
+        // Gestione del border-color dello #Slider
+        document.addEventListener("keydown", (e) => {
+          const possibleKeys = ["ArrowUp", "Up", "ArrowDown", "Down", "ArrowRight", "Right", "ArrowLeft", "Left"];
+          possibleKeys.forEach(key => {
+            if (key === e.key) slider.classList.add("active");
+          });
+        });
+
+        // Gestione del border-color dello #Slider
+        document.addEventListener("keyup", (e) => {
+          const possibleKeys = ["ArrowUp", "Up", "ArrowDown", "Down", "ArrowRight", "Right", "ArrowLeft", "Left"];
+          possibleKeys.forEach(key => {
+            if (key === e.key) slider.classList.remove("active");
+          });
+        });
 
       // Event listeners per copia e tema
       const copyDiv = document.getElementById("Copy");
