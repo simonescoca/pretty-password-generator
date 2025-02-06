@@ -108,6 +108,15 @@
         font-size: 21px;
       }
 
+      #Ticks-container .tick {
+        background-color: #44398D;
+        position: absolute;
+      }
+
+      body.dark-mode #Ticks-container .tick {
+        background-color: #BFBAFF;
+      }
+
       @media screen and (max-width: 575px) {
         #Slider-pill {
           height: 100%;
@@ -132,6 +141,10 @@
           height: 1.7px;
           width: 10px;
           border-radius: 1px;
+        }
+        #Ticks-container .tick {
+          width: 6px;
+          height: 1px;
         }
       }
 
@@ -159,6 +172,10 @@
           height: 1.7px;
           width: 10px;
           border-radius: 1px;
+        }
+        #Ticks-container .tick {
+          height: 6px;
+          width: 1px;
         }
       }
 
@@ -198,6 +215,16 @@
       body.dark-mode .Block.has-next::after {
         background: #e0e0e0 !important;
       }
+
+      #Ticks-container .tick {
+        background-color: #44398D;
+        position: absolute;
+        z-index: 1;
+      }
+
+      body.dark-mode #Ticks-container .tick {
+        background-color: #BFBAFF;
+      }
     </style>
   </head>
   <body>
@@ -225,6 +252,7 @@
           id="Slider-pill"
           class="m-auto mx-sm-auto mt-sm-3 rounded-pill d-flex flex-column flex-sm-row justify-content-between align-items-center position-relative"
         >
+          <div id="Ticks-container" class="position-absolute w-100 h-100"></div>
           <div id="Copy" class="rounded-circle d-flex justify-content-center align-items-center">
             <i class="fa-regular fa-copy"></i>
           </div>
@@ -256,6 +284,34 @@
       let startSliderPos = 0;
       let initialLevel = 0;
       let hasCrossedBoundary = false;
+
+      function createTicks() {
+        const ticksContainer = document.getElementById('Ticks-container');
+        ticksContainer.innerHTML = '';
+        const snaps = getSnapPositions();
+        const isHorizontal = dragAxis === 'horizontal';
+
+        let i = 0;
+        snaps.forEach(pos => {
+          const tick1 = document.createElement('div');
+          const tick2 = document.createElement('div');
+          tick1.className = tick2.className = 'tick';
+          
+          if(isHorizontal) {
+            tick1.style.cssText = `left: ${pos + 33}px; top: 0;`;
+            tick2.style.cssText = `left: ${pos + 33}px; bottom: 0;`;
+          } else {
+            tick1.style.cssText = `top: ${pos + 33}px; left: 0;`;
+            tick2.style.cssText = `top: ${pos + 33}px; right: 0;`;
+          }
+          
+          if (i != 0) {
+            ticksContainer.appendChild(tick1);
+            ticksContainer.appendChild(tick2);
+          }
+          i++
+        });
+      }
 
       function genRandomIndex(len) {
         const arr = new Uint32Array(1);
@@ -549,12 +605,16 @@
       copyDiv.addEventListener("keydown", (e) => e.key === "Enter" && copyPassword());
 
       modeButton.addEventListener("change", modeLogic);
-    //   window.addEventListener("resize", setInitialPosition);  // non possiamo resettare la posizione al resize della window, dobbiamo salvare la posizione dello slider e riposizionare lo slider a quella posizione una volta terminato il resize, senza però che la password cambi.
+
+      window.addEventListener("resize", setInitialPosition);  // non possiamo resettare la posizione al resize della window, dobbiamo salvare la posizione dello slider e riposizionare lo slider a quella posizione una volta terminato il resize, senza però che la password cambi.
+      window.addEventListener("resize", createTicks);
+
       slider.addEventListener("mousedown", dragStart);
       slider.addEventListener("touchstart", dragStart, { passive: false });
 
       document.addEventListener("DOMContentLoaded", modeLogic);
       document.addEventListener("DOMContentLoaded", setInitialPosition);
+      document.addEventListener("DOMContentLoaded", createTicks);
     </script>
   </body>
 </html>
