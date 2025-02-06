@@ -1,4 +1,3 @@
-// Elementi DOM e variabili globali
 const slider = document.getElementById("Slider");
 const sliderPill = document.getElementById("Slider-pill");
 const modeButton = document.getElementById("Mode-button");
@@ -12,7 +11,6 @@ let startSliderPos = 0;
 let initialLevel = 0;
 let hasCrossedBoundary = false;
 
-// Funzione per animare l'icona di copia: mostra la spunta verde e aggiunge un bordo 8px solid #28A745
 function animateCopyIcon() {
     copyDiv.innerHTML = '<i class="fa-solid fa-check"></i>';
     copyDiv.classList.add("scale-80");
@@ -23,16 +21,15 @@ function animateCopyIcon() {
     }, 2000);
 }
 
-// Aggiorna il colore di sfondo del "pill" in base al livello e al tema
 function updatePillBackground(level, darkmode) {
     const colors = [
-        "#1D1941", // 0 dark
-        "#CAC7FE", // 0 light
-        "#FF4848", // livello 1
-        "#FDFD5F", // livello 2
-        "#85FF7D", // livello 3
-        "#5DFF54", // livello 4
-        "#10FF03"  // livello 5
+        "#1D1941",
+        "#CAC7FE",
+        "#FF4848",
+        "#FDFD5F",
+        "#85FF7D",
+        "#5DFF54",
+        "#10FF03"
     ];
 
     let color;
@@ -47,7 +44,6 @@ function updatePillBackground(level, darkmode) {
     slider.style.borderColor = color;
 }
 
-// Aggiorna lo stato del pulsante "Copy" in base al livello corrente
 function copyButtonHandler() {
   if (currentLevel === 0) {
     copyDiv.classList.remove("scale-100");
@@ -58,7 +54,6 @@ function copyButtonHandler() {
   }
 }
 
-// Crea le tacche (ticks) nello slider
 function createTicks() {
   const ticksContainer = document.getElementById("Ticks-container");
   ticksContainer.innerHTML = "";
@@ -87,14 +82,12 @@ function createTicks() {
     });
 }
 
-// Funzione per generare un indice casuale
 function genRandomIndex(len) {
   const arr = new Uint32Array(1);
   window.crypto.getRandomValues(arr);
   return arr[0] % len;
 }
 
-// Genera la password in base al livello
 function generatePw(level) {
     const ABC = "ABCDEFGHJKLMNPQRSTUVWXYZ".split("");
     const abc = "abcdefghijkmnopqrstuvwxyz".split("");
@@ -130,7 +123,6 @@ function generatePw(level) {
     return password.match(/.{1,4}/g).join("-");
 }
 
-// Aggiorna la visualizzazione della password e dello slider
 function updatePasswordDisplay(level) {
     updatePillBackground(level, document.body.classList.contains("dark-mode"));
     const pwDisplay = document.getElementById("Pw-display");
@@ -159,7 +151,6 @@ function updatePasswordDisplay(level) {
     copyButtonHandler();
 }
 
-// Aggiorna l'icona dello slider in base al livello corrente
 function updateSliderIcon() {
     let iconClass = "", iconClassI = "", iconClassII = "";
     if (currentLevel === 0 || currentLevel === 5) {
@@ -181,7 +172,6 @@ function updateSliderIcon() {
     }
 }
 
-// Imposta la posizione iniziale dello slider
 function setInitialPosition() {
     dragAxis = window.innerWidth < 576 ? "vertical" : "horizontal";
     slider.style.top = "0px";
@@ -190,14 +180,12 @@ function setInitialPosition() {
     updatePasswordDisplay(0);
 }
 
-// Restituisce la posizione del puntatore (mouse o touch)
 function getPointerPosition(e) {
     return e.touches
         ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
         : { x: e.clientX, y: e.clientY };
 }
 
-// Calcola le posizioni di snap per lo slider
 function getSnapPositions() {
     const pillRect = sliderPill.getBoundingClientRect();
     const blocks = document.querySelectorAll("#Pw-display .Block");
@@ -213,7 +201,6 @@ function getSnapPositions() {
     return snaps;
 }
 
-// Determina il livello corrente in base alla posizione dello slider
 function calculateCurrentLevel(currentPos, snaps) {
     let level = 0;
     for (let i = snaps.length - 1; i >= 0; i--) {
@@ -225,7 +212,6 @@ function calculateCurrentLevel(currentPos, snaps) {
     return level;
 }
 
-// Inizio del drag dello slider
 function dragStart(e) {
     slider.classList.add("scale-80");
     e.preventDefault();
@@ -247,7 +233,6 @@ function dragStart(e) {
     document.addEventListener("touchend", dragEnd);
 }
 
-// Durante il drag dello slider
 function dragMove(e) {
     if (!isDragging) return;
     e.preventDefault();
@@ -272,7 +257,6 @@ function dragMove(e) {
     }
 }
 
-// Fine del drag dello slider
 function dragEnd(e) {
     slider.classList.remove("scale-80");
     isDragging = false;
@@ -301,7 +285,6 @@ function dragEnd(e) {
     }
 }
 
-// Sposta lo slider ad un livello specifico
 function moveSliderToLevel(newLevel) {
     const snaps = getSnapPositions();
     newLevel = Math.max(0, Math.min(snaps.length - 1, newLevel));
@@ -314,7 +297,6 @@ function moveSliderToLevel(newLevel) {
     updatePasswordDisplay(newLevel);
 }
 
-// Copia la password negli appunti e anima l'icona
 function copyPassword() {
     const password = Array.from(document.querySelectorAll("#Pw-display .Block"))
         .map((block) => block.textContent)
@@ -338,13 +320,11 @@ function copyPassword() {
     }
 }
 
-// Gestione del tema dark/light
 function modeLogic() {
     document.body.classList.toggle("dark-mode", modeButton.checked);
     updatePillBackground(currentLevel, modeButton.checked);
 }
 
-// Funzioni per il resize
 function setPosition(level) {
     dragAxis = window.innerWidth < 576 ? "vertical" : "horizontal";
     const snaps = getSnapPositions();
@@ -394,7 +374,6 @@ function handleResize() {
     };
 }
 
-// Gestione dei tasti per cambiare livello o copiare
 document.addEventListener("keydown", (e) => {
     const isDesktop = !("ontouchstart" in window);
     let newLevel = currentLevel;
