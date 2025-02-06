@@ -99,6 +99,16 @@
       #Pw-display {
         color: #44398D !important;
       }
+
+      #Pw-display .Block.has-next::after {
+        content: " ";
+        display: table;
+        position: absolute;
+        background-color: #44398D;
+        height: 1.7px;
+        width: 10px;
+        border-radius: 1px;
+      }
       #Ticks-container {
         pointer-events: none;
       }
@@ -124,16 +134,9 @@
           height: 20%;
         }
         #Pw-display .Block.has-next::after {
-          content: " ";
-          display: table;
-          position: absolute;
           bottom: -1px;
           left: 50%;
           transform: translate(-50%, 50%);
-          background: black;
-          height: 1.7px;
-          width: 10px;
-          border-radius: 1px;
         }
         #Ticks-container .tick {
           width: 6px;
@@ -154,16 +157,9 @@
           width: 20%;
         }
         #Pw-display .Block.has-next::after {
-          content: " ";
-          display: table;
-          position: absolute;
           right: -1px;
           top: 50%;
           transform: translate(50%, -50%);
-          background: black;
-          height: 1.7px;
-          width: 10px;
-          border-radius: 1px;
         }
         #Ticks-container .tick {
           height: 6px;
