@@ -75,6 +75,11 @@
         font-size: 25px;
         transition: all 0.2s ease;
       }
+      /* Aggiunto per simulare l'effetto :active anche su classe active */
+      #Copy:active,
+      #Copy.active {
+        transform: scale(0.92);
+      }
       main #Slider-pill #Slider {
         background-color: #5445cb;
         color: #ffffff;
@@ -85,9 +90,6 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-      }
-      #Copy:active {
-        transform: scale(0.92);
       }
       main #Slider-pill #Pw-display {
         font-family: "Courier Prime", monospace;
@@ -544,7 +546,9 @@
           .join("-");
         if (!password) return;
         if (navigator.clipboard?.writeText) {
-          navigator.clipboard.writeText(password).then(showCopyNotification);
+          navigator.clipboard.writeText(password)
+            .then(showCopyNotification)
+            .catch(() => {}); // Supponiamo di voler sopprimere l'errore in console
         } else {
           const textArea = document.createElement("textarea");
           textArea.value = password;
@@ -588,7 +592,6 @@
           slider.style.left = snaps[level] + "px";
           slider.style.top = "0px";
           slider.style.bottom = "0px";
-
         }
         currentLevel = level;
         updateSliderIcon();
@@ -650,17 +653,35 @@
             newLevel--;
             break;
           case "Enter":
-            if (isDesktop) copyPassword();
+            if (isDesktop) {
+                copyPassword();
+                document.getElementById("Copy").classList.add("active");
+            }
             break;
         }
         if (newLevel !== currentLevel) moveSliderToLevel(newLevel);
+      });
+
+      document.addEventListener("keyup", (e) => {
+        if (e.key === "Enter") document.getElementById("Copy").classList.remove("active");
       });
 
       // Event listeners per copia e tema
       const copyDiv = document.getElementById("Copy");
       copyDiv.addEventListener("pointerup", copyPassword);
       copyDiv.addEventListener("click", copyPassword);
-      copyDiv.addEventListener("keydown", (e) => e.key === "Enter" && copyPassword());
+      // Nuovi event handler per simulare l'effetto :active quando si preme Invio
+      copyDiv.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          copyDiv.classList.add("active");
+          copyPassword();
+        }
+      });
+      copyDiv.addEventListener("keyup", (e) => {
+        if (e.key === "Enter") {
+          copyDiv.classList.remove("active");
+        }
+      });
       modeButton.addEventListener("change", modeLogic);
 
       // Gestione del resize: riposiziona lo slider e ripristina la password salvata
