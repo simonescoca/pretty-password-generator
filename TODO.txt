@@ -1,3 +1,2 @@
 1. colore all'header + svg nuvola
 2. abbellire e spostare notifica di copia
-3. aggiungere effetto active allo #SLider
