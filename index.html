@@ -80,6 +80,13 @@
       #Copy.active {
         transform: scale(0.92);
       }
+
+      /* non funziona e non si sa perché */
+      #Slider.active {
+        border-width: 10px;
+        border-color: white;
+      }
+
       main #Slider-pill #Slider {
         background-color: #5445cb;
         color: #ffffff;
@@ -447,6 +454,7 @@
 
       // Inizio del drag dello slider
       function dragStart(e) {
+        slider.classList.add("active");
         e.preventDefault();
         isDragging = true;
         initialLevel = currentLevel;
@@ -495,6 +503,7 @@
 
       // Fine del drag dello slider
       function dragEnd(e) {
+        slider.classList.remove("active");
         isDragging = false;
         ["mousemove", "mouseup", "touchmove", "touchend"].forEach((event) =>
           document.removeEventListener(event, dragEnd)
@@ -653,21 +662,23 @@
             newLevel--;
             break;
           case "Enter":
-            if (isDesktop) {
-                copyPassword();
-                document.getElementById("Copy").classList.add("active");
-            }
+            if (isDesktop) copyPassword();
             break;
         }
         if (newLevel !== currentLevel) moveSliderToLevel(newLevel);
       });
 
-      document.addEventListener("keyup", (e) => {
-        if (e.key === "Enter") document.getElementById("Copy").classList.remove("active");
-      });
-
       // Event listeners per copia e tema
       const copyDiv = document.getElementById("Copy");
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") copyDiv.classList.add("active");
+      });
+
+      document.addEventListener("keyup", (e) => {
+        if (e.key === "Enter") copyDiv.classList.remove("active");
+      });
+
       copyDiv.addEventListener("pointerup", copyPassword);
       copyDiv.addEventListener("click", copyPassword);
       // Nuovi event handler per simulare l'effetto :active quando si preme Invio
