@@ -573,6 +573,61 @@
         updatePillBackground(currentLevel, modeButton.checked);
       }
 
+      // *** FUNZIONI AGGIORNATE PER IL RESIZE ***
+
+      // setPosition: riposiziona lo slider in base al livello salvato e alle nuove dimensioni
+      function setPosition(level) {
+        dragAxis = window.innerWidth < 576 ? "vertical" : "horizontal";
+        const snaps = getSnapPositions();
+        level = Math.max(0, Math.min(snaps.length - 1, level));
+        if (dragAxis === "vertical") {
+          slider.style.top = snaps[level] + "px";
+          slider.style.left = "0px";
+          slider.style.right = "0px";
+        } else {
+          slider.style.left = snaps[level] + "px";
+          slider.style.top = "0px";
+          slider.style.bottom = "0px";
+
+        }
+        currentLevel = level;
+        updateSliderIcon();
+      }
+
+      // setPassword: ripristina la visualizzazione della password salvata
+      function setPassword(password) {
+        if (!password) return;
+        const pwDisplay = document.getElementById("Pw-display");
+        const blocks = pwDisplay.querySelectorAll(".Block");
+        const groups = password.split("-");
+        blocks.forEach((block, index) => {
+          if (index < groups.length) {
+            block.textContent = groups[index];
+            if (index < groups.length - 1) {
+              block.classList.add("has-next");
+            } else {
+              block.classList.remove("has-next");
+            }
+          } else {
+            block.textContent = "";
+            block.classList.remove("has-next");
+          }
+        });
+      }
+
+      // Funzione handleResize: salva il livello e la password visualizzata prima del resize
+      function handleResize() {
+        const saveCurrentLevel = currentLevel;
+        const saveCurrentPassword = Array.from(document.querySelectorAll("#Pw-display .Block"))
+          .map((block) => block.textContent)
+          .filter((text) => text)
+          .join("-");
+        return {
+          savedLevel: saveCurrentLevel,
+          savedPassword: saveCurrentPassword
+        };
+      }
+
       // Gestione della pressione dei tasti per cambiare livello o copiare
       document.addEventListener("keydown", (e) => {
         const isDesktop = !("ontouchstart" in window);
@@ -608,8 +663,17 @@
       copyDiv.addEventListener("keydown", (e) => e.key === "Enter" && copyPassword());
       modeButton.addEventListener("change", modeLogic);
 
-      // Gestione del resize: riposiziona lo slider e ricrea le tacche
-      window.addEventListener("resize", setInitialPosition);
+      // Gestione del resize: riposiziona lo slider e ripristina la password salvata
+      window.addEventListener("resize", () => {
+        if (currentLevel != 0) {
+          const savedState = handleResize();
+          setPosition(savedState.savedLevel);
+          setPassword(savedState.savedPassword);
+        } else {
+          setInitialPosition();
+        }
+      });
+
       window.addEventListener("resize", createTicks);
 
       // Event listeners per il drag dello slider
