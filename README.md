@@ -1,63 +1,40 @@
 # Pretty Password Generator 🔐
 
-![License](https://img.shields.io/github/license/simonescoca/pretty-password-generator)
-![Repo Stars](https://img.shields.io/github/stars/simonescoca/pretty-password-generator?style=social)
-![Repo Forks](https://img.shields.io/github/forks/simonescoca/pretty-password-generator?style=social)
+## 🚀 Description
 
-## 🚀 Descrizione
+**Pretty Password Generator** is a simple and elegant responsive web app for generating secure and customized passwords. Thanks to its clean and intuitive interface, you can generate strong passwords in just a few seconds!
 
-**Pretty Password Generator** è una web app semplice ed elegante per generare password sicure e personalizzate. Grazie alla sua interfaccia pulita e intuitiva, puoi generare password robuste in pochi click!
+## ✨ Features
 
-## ✨ Funzionalità
+- 🔒 Secure and random password generation
+- ⚙️ Customization of level of strenght
+- 🎨 Modern and responsive UI with Bootstrap
+- 📋 Copy password with a single touch! (or click 🙃)
 
-- 🔒 Generazione di password sicure e casuali
-- ⚙️ Personalizzazione della lunghezza e del tipo di caratteri
-- 🎨 UI moderna e responsive grazie a Bootstrap
-- 📋 Copia la password con un solo click
+## 🛠️ Technologies Used
 
-## 📸 Anteprima
-
-![Preview](https://via.placeholder.com/800x400?text=Pretty+Password+Generator+Preview)
-
-## 🛠️ Tecnologie utilizzate
-
-- **HTML5** - Struttura della pagina
-- **CSS3** - Stile e design
-- **JavaScript** - Logica della generazione password
+- **HTML5** - Page structure
+- **CSS3** - Styling and design
+- **JavaScript** - Password generation logic
 - **Bootstrap** - Responsive UI
 
-## 📥 Installazione
+## 📌 How to Use
 
-Puoi clonare il progetto ed eseguirlo in locale con i seguenti comandi:
+1. Choose the password length based on 5 levels
+2. Slide the slider to select the password level
+3. Click **Copy** when you've found the most suitable password! 🔑
 
-```bash
-git clone https://github.com/simonescoca/pretty-password-generator.git
-cd pretty-password-generator
-open index.html
-```
+You can [try it](https://simonescoca.github.io/pretty-password-generator/) directly online.
 
-Oppure, puoi provarlo direttamente online visitando il [GitHub Pages link](https://simonescoca.github.io/pretty-password-generator/).
+## 🤝 Contribute
 
-## 📌 Come usare
+If you have ideas to improve the app, you are welcome to contribute! 🚀
 
-1. Scegli la lunghezza della password
-2. Seleziona i caratteri da includere (numeri, lettere, simboli...)
-3. Clicca su **Genera Password**
-4. Copia la password generata e usala in sicurezza! 🔑
-
-## 🤝 Contribuire
-
-Se hai idee per migliorare l'app, sei il benvenuto a contribuire! 🚀
-
-1. Fai un **fork** della repository
-2. Crea un **branch**: `git checkout -b feature-nuova-funzionalita`
-3. Apporta le modifiche e fai un **commit**: `git commit -m 'Aggiunta nuova funzionalità'`
-4. Fai un **push** del branch: `git push origin feature-nuova-funzionalita`
-5. Apri una **Pull Request** 🚀
-
-## 📜 Licenza
-
-Questo progetto è rilasciato sotto licenza **MIT**. Consulta il file [`LICENSE`](LICENSE) per maggiori dettagli.
+1. Fork the repository
+2. Create a **branch**: `git checkout -b feature-new-feature`
+3. Make your changes and commit: `git commit -m 'Added new feature'`
+4. Push the branch: `git push origin feature-new-feature`
+5. Open a **Pull Request** 🚀
 
 ---
 
